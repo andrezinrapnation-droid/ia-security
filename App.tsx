@@ -10,7 +10,7 @@ import { Chat } from './components/features/Chat';
 import { ApiKeyModal } from './components/ApiKeyModal';
 import type { Tab } from './types';
 
-const App: React.FC = () => {
+export const App: React.FC = () => {
     const [activeTab, setActiveTab] = useState<Tab>('chat');
     const [apiKey, setApiKey] = useState<string | null>(null);
 
@@ -63,5 +63,3 @@ const App: React.FC = () => {
         </div>
     );
 };
-
-export default App;
