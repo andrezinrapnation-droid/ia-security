@@ -4,7 +4,11 @@ import { getQuiz, Quiz, QuizQuestion } from '../../services/geminiService';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { BeakerIcon } from '../icons/BeakerIcon';
 
-export const QuizGenerator: React.FC = () => {
+interface QuizGeneratorProps {
+    apiKey: string;
+}
+
+export const QuizGenerator: React.FC<QuizGeneratorProps> = ({ apiKey }) => {
     const [topic, setTopic] = useState<string>('Cibersegurança Geral');
     const [quizData, setQuizData] = useState<Quiz | null>(null);
     const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
@@ -22,14 +26,14 @@ export const QuizGenerator: React.FC = () => {
         setIsSubmitted(false);
 
         try {
-            const result = await getQuiz(topic);
+            const result = await getQuiz(apiKey, topic);
             setQuizData(result);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado.');
         } finally {
             setIsLoading(false);
         }
-    }, [topic, isLoading]);
+    }, [topic, isLoading, apiKey]);
 
     const handleAnswerChange = (questionIndex: number, answer: string) => {
         setUserAnswers(prev => ({ ...prev, [questionIndex]: answer }));

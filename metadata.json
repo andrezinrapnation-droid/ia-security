@@ -1,5 +1,5 @@
 {
-  "name": "Copy of Mentor de Cibersegurança AI",
-  "description": "Um assistente com tecnologia de IA projetado para ajudar estudantes de cibersegurança a entender ataques, conceitos e mecanismos de defesa complexos por meio de explicações claras e estruturadas.",
+  "name": "Mentor de Cibersegurança AI",
+  "description": "Um assistente com tecnologia de IA projetado para ajudar estudantes de cibersegurança a entender ataques, conceitos e mecanismos de defesa complexos por meio de um explicador, simulador e chatbot conversacional.",
   "requestFramePermissions": []
 }

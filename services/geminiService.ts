@@ -1,21 +1,15 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
-
-if (!API_KEY) {
-    throw new Error("API_KEY environment variable not set");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
-
 const getGeminiResponse = async (
+    apiKey: string,
     model: string,
     prompt: string,
     systemInstruction: string,
     isJson: boolean = false,
 ) => {
     try {
+        const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
             model,
             contents: prompt,
@@ -36,7 +30,7 @@ const getGeminiResponse = async (
     }
 }
 
-export const getCyberExplanation = async (query: string): Promise<string> => {
+export const getCyberExplanation = async (apiKey: string, query: string): Promise<string> => {
     const systemInstruction = `Você é o Mentor de Cibersegurança AI, um especialista em cibersegurança. Seu papel é explicar conceitos complexos de cibersegurança para estudantes. Suas explicações devem ser claras, estruturadas e fáceis de entender. Sempre formate sua resposta em Markdown. Não use citações em bloco do markdown (>).`;
     const prompt = `
 Por favor, forneça uma explicação detalhada sobre o seguinte tópico de cibersegurança: "${query}"
@@ -56,16 +50,16 @@ Estruture sua resposta com as seguintes seções, usando títulos Markdown:
 ### ✅ Pontos Principais
 (Resuma os pontos mais importantes.)
     `;
-    return getGeminiResponse('gemini-3-pro-preview', prompt, systemInstruction);
+    return getGeminiResponse(apiKey, 'gemini-3-pro-preview', prompt, systemInstruction);
 };
 
-export const getVulnerabilityAnalysis = async (systemDescription: string): Promise<string> => {
+export const getVulnerabilityAnalysis = async (apiKey: string, systemDescription: string): Promise<string> => {
     const systemInstruction = `Você é um analista de segurança e pentester sênior. Analise a descrição do sistema fornecida e identifique potenciais vulnerabilidades. Para cada vulnerabilidade, forneça uma avaliação de risco (Baixo, Médio, Alto, Crítico), uma explicação detalhada do risco e etapas de mitigação práticas. Formate toda a resposta em Markdown.`;
     const prompt = `Analise o seguinte sistema em busca de vulnerabilidades de segurança:\n\n---\n\n${systemDescription}\n\n---\n\nForneça sua análise estruturada com títulos para cada vulnerabilidade encontrada.`;
-    return getGeminiResponse('gemini-3-pro-preview', prompt, systemInstruction);
+    return getGeminiResponse(apiKey, 'gemini-3-pro-preview', prompt, systemInstruction);
 };
 
-export const getAttackSimulation = async (attackType: string): Promise<string> => {
+export const getAttackSimulation = async (apiKey: string, attackType: string): Promise<string> => {
     const systemInstruction = `Você é um educador de cibersegurança simulando ciberataques para fins de aprendizado. Descreva o ataque selecionado em detalhes. A explicação deve ser clara, prática e voltada para estudantes. Formate a resposta em Markdown.`;
     const prompt = `
 Simule e explique um ataque de "${attackType}".
@@ -83,7 +77,7 @@ Estruture sua resposta com as seguintes seções usando títulos Markdown:
 ### 💡 Cenário do Mundo Real
 (Forneça uma história breve e ilustrativa de como este ataque pode ocorrer.)
     `;
-    return getGeminiResponse('gemini-3-pro-preview', prompt, systemInstruction);
+    return getGeminiResponse(apiKey, 'gemini-3-pro-preview', prompt, systemInstruction);
 };
 
 export interface QuizQuestion {
@@ -97,10 +91,10 @@ export interface Quiz {
     questions: QuizQuestion[];
 }
 
-export const getQuiz = async (topic: string): Promise<Quiz> => {
+export const getQuiz = async (apiKey: string, topic: string): Promise<Quiz> => {
     const systemInstruction = `Você é um gerador de quizzes de IA especializado em cibersegurança. Crie um quiz de múltipla escolha sobre o tópico fornecido. O quiz deve ter exatamente 5 questões. Para cada questão, forneça 4 opções, onde apenas uma é correta. Além disso, forneça uma breve explicação para a resposta correta. Você deve responder APENAS com um objeto JSON válido.`;
     const prompt = `Gere um quiz de múltipla escolha com 5 questões sobre "${topic}".`;
-    const responseText = await getGeminiResponse('gemini-3-pro-preview', prompt, systemInstruction, true);
+    const responseText = await getGeminiResponse(apiKey, 'gemini-3-pro-preview', prompt, systemInstruction, true);
     try {
         // The Gemini API might wrap the JSON in ```json ... ```, so we clean it.
         const cleanedJson = responseText.replace(/^```json\s*|```\s*$/g, '');

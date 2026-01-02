@@ -13,7 +13,11 @@ const attackTypes = [
     'Malware (Ransomware)',
 ];
 
-export const AttackSimulator: React.FC = () => {
+interface AttackSimulatorProps {
+    apiKey: string;
+}
+
+export const AttackSimulator: React.FC<AttackSimulatorProps> = ({ apiKey }) => {
     const [simulation, setSimulation] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +32,7 @@ export const AttackSimulator: React.FC = () => {
         setActiveAttack(attackType);
 
         try {
-            const result = await getAttackSimulation(attackType);
+            const result = await getAttackSimulation(apiKey, attackType);
             setSimulation(result);
         } catch (err)
  {
@@ -36,7 +40,7 @@ export const AttackSimulator: React.FC = () => {
         } finally {
             setIsLoading(false);
         }
-    }, [isLoading]);
+    }, [isLoading, apiKey]);
 
     return (
         <div className="flex flex-col h-full">

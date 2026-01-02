@@ -1,10 +1,11 @@
 
 import React from 'react';
-import type { Tab } from '../App';
+import type { Tab } from '../types';
 import { ShieldIcon } from './icons/ShieldIcon';
 import { SearchIcon } from './icons/SearchIcon';
 import { CrosshairIcon } from './icons/CrosshairIcon';
 import { BeakerIcon } from './icons/BeakerIcon';
+import { ChatIcon } from './icons/ChatIcon';
 
 interface TabsProps {
     activeTab: Tab;
@@ -12,6 +13,7 @@ interface TabsProps {
 }
 
 const tabConfig = [
+    { id: 'chat', label: 'Chatbot', icon: ChatIcon },
     { id: 'explainer', label: 'Explicador de Conceitos', icon: ShieldIcon },
     { id: 'scanner', label: 'Analisador de Vulnerabilidades', icon: SearchIcon },
     { id: 'simulator', label: 'Simulador de Ataques', icon: CrosshairIcon },

@@ -7,7 +7,11 @@ import { LoadingSpinner } from '../LoadingSpinner';
 import { getCyberExplanation } from '../../services/geminiService';
 import { ShieldIcon } from '../icons/ShieldIcon';
 
-export const ConceptExplainer: React.FC = () => {
+interface ConceptExplainerProps {
+    apiKey: string;
+}
+
+export const ConceptExplainer: React.FC<ConceptExplainerProps> = ({ apiKey }) => {
     const [query, setQuery] = useState<string>('');
     const [explanation, setExplanation] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -21,14 +25,14 @@ export const ConceptExplainer: React.FC = () => {
         setExplanation('');
 
         try {
-            const result = await getCyberExplanation(prompt);
+            const result = await getCyberExplanation(apiKey, prompt);
             setExplanation(result);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado. Por favor, tente novamente.');
         } finally {
             setIsLoading(false);
         }
-    }, [isLoading]);
+    }, [isLoading, apiKey]);
     
     const handlePromptSelect = (prompt: string) => {
         setQuery(prompt);
